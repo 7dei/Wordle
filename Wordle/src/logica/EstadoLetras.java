@@ -1,7 +1,7 @@
 package logica;
 
 public enum EstadoLetras {
-	Ausente,
-	Presente,
-	Correcta
+	AUSENTE,
+	PRESENTE,
+	CORRECTA
 }

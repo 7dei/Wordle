@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 public class ImportarDiccionario {
 
-	//Recibe el .txt, lo lee, lo filtra,limpia cada linea y lo devuelve en forma de set.
+	//Recibe el .txt, lo lee, lo filtra, limpia cada linea y lo devuelve en forma de set.
 	public static HashSet<String> cargarDesdeArchivo(String rutaArchivo) throws IOException {
 		
 		HashSet<String> palabras = new HashSet<>();		
