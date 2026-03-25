@@ -8,19 +8,23 @@ import java.util.HashSet;
 
 public class ImportarDiccionario {
 
-	public HashSet<String> cargar(String rutaArchivo) throws IOException {
+	//Recibe el .txt, lo lee, lo filtra,limpia cada linea y lo devuelve en forma de set.
+	public static HashSet<String> cargarDesdeArchivo(String rutaArchivo) throws IOException {
 		
 		HashSet<String> palabras = new HashSet<>();		
 		String linea;
 		FileReader archivo = new FileReader(rutaArchivo);
 		
 		try (BufferedReader br = new BufferedReader(archivo)) {
+			
 			while ((linea = br.readLine()) != null) {
 				String palabra = linea.trim().toUpperCase();
-				palabras.add(palabra);
-			} 	
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+				if (palabra.length() == 5){palabras.add(palabra);}
+			}
+			
+		}
+		catch (IOException e) {
+			System.err.println("Error al cargar el documento." + e.getMessage());
 		}
 		return palabras; 
 	}
