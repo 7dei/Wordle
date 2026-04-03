@@ -19,7 +19,7 @@ public class Diccionario {
 	}
     
 	
-	// genera una palabra aleatoria, aunque los hashset son muy rapidos para recorrer arreglos
+	// genera una palabra aleatoria. aunque los hashset son muy rapidos para recorrer arreglos
 	// no se puede acceder por indice. se pasa a arraylist y se le da un indice aleatorio.
 	public String obtenerPalabraAleatoria() {
 		List<String> listaTemporal = new ArrayList<>(this.palabras);
@@ -27,4 +27,13 @@ public class Diccionario {
 		return listaTemporal.get(indice);
 	}
 	
+	// agrego el metodo para validar si una palabra existe en el diccionario, 
+	// lo uso en el juego para validar que el usuario ingrese palabras validas.
+	
+	public boolean esValida(String palabraIngresada) {
+		if (palabraIngresada == null || palabraIngresada.length() != 5) {
+			return false;
+		}
+		return this.palabras.contains(palabraIngresada.toUpperCase());		
+	}
 }

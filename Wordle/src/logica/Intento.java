@@ -1,0 +1,23 @@
+package logica;
+
+import java.util.List; 
+import logica.ResultadoLetra;
+
+public class Intento {
+
+    private String palabra;
+    private List<ResultadoLetra> resultado;
+
+    public Intento(String palabra, List<ResultadoLetra> resultado) {
+        this.palabra = palabra;
+        this.resultado = resultado;
+    }
+
+    public String getPalabra() {
+        return palabra;
+    }
+
+    public List<ResultadoLetra> getResultado() {
+        return resultado;
+    }
+}
