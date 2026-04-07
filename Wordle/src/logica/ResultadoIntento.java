@@ -6,19 +6,20 @@ import logica.ResultadoLetra;
 public class ResultadoIntento {
 
     private List<ResultadoLetra> resultado;
-
+    
     public ResultadoIntento(List<ResultadoLetra> resultado) {
         this.resultado = resultado;
+       
     }
 
     public List<ResultadoLetra> getResultado() {
         return resultado;
     }
 
+    
     @Override
     public String toString( ) {
     	StringBuilder sb = new StringBuilder();
-    	
     	// resultado = lista de 5 elems
     	for (ResultadoLetra res : resultado) {
     		switch (res) {

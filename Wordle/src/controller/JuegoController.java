@@ -25,7 +25,7 @@ public class JuegoController {
         	
         	ResultadoIntento res = juego.ingresar(palabra);
         	
-        	view.mostrarResultado(res);
+        	view.mostrarResultado(res, palabra.toCharArray(), juego.getPalabraSecreta());
         	
             if (juego.gano()) {
                 view.mostrarMensaje("Ganaste");

@@ -19,15 +19,13 @@ public class Juego {
     private Diccionario diccionario; 
     private boolean juegoTerminado;	
 	
-    public Juego(//EleccionDificultad dificultad (Lo comente ahora, hasta que pensemos si
-    		//agregar la dificultad o no.
-    		EleccionIdioma idioma) throws IOException {
+    public Juego(EleccionDificultad dificultad, EleccionIdioma idioma) throws IOException {
     	
- //       this.intentosRestantes = dificultad.getIntentosMaximos(); 
+    	this.intentosRestantes = dificultad.getIntentosMaximos(); 
     	
         this.diccionario = new Diccionario(idioma);
         this.palabraSecreta = diccionario.obtenerPalabraAleatoria().toLowerCase();
-        
+        System.out.println(this.palabraSecreta); //BORRAR, solo para ver palabra elegida en consola
         this.intentos = new ArrayList<>(); 
         this.palabrasIntentadas = new HashSet<>();
         this.juegoTerminado = false;
@@ -131,9 +129,9 @@ public class Juego {
     }
 
     public String getPalabraSecreta() {
-        if (!juegoTerminado) {
+        /*if (!juegoTerminado) {
             throw new IllegalStateException("El juego todavía no terminó");
-        }
+        }*/
         return palabraSecreta;
     }
 }
