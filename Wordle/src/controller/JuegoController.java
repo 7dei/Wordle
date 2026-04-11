@@ -1,11 +1,5 @@
 package controller;
 
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
-
-import logica.EleccionDificultad;
-import logica.EleccionIdioma;
 import logica.Juego;
 import logica.ResultadoIntento;
 import view.JuegoView;
@@ -15,18 +9,10 @@ public class JuegoController {
     private Juego juego;
     private JuegoView view;
 
-    public JuegoController(EleccionDificultad dificultad, EleccionIdioma idioma) {
-    	
-        
-    	try {
-    		this.juego = new Juego(dificultad, idioma);
-    		this.view = new JuegoView(juego.getIntentosRestantes());
-    		view.setController(this);
-    		iniciar();
-    	}catch (IOException e) {
-    		e.printStackTrace();
-    	    JOptionPane.showMessageDialog(null, "Error al iniciar el juego");//esto es correcto? que el controller conozca joptionPane?
-        }
+    public JuegoController(Juego juego, JuegoView view) {
+        this.juego = juego;
+        this.view = view;
+        view.setController(this);
     }
 
     public void iniciar() {
@@ -39,7 +25,7 @@ public class JuegoController {
         	
         	ResultadoIntento res = juego.ingresar(palabra);
         	
-        	view.mostrarResultado(res, palabra.toCharArray(), juego.getPalabraSecreta());
+        	view.mostrarResultado(res);
         	
             if (juego.gano()) {
                 view.mostrarMensaje("Ganaste");

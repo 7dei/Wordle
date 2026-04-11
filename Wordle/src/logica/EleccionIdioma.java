@@ -5,11 +5,12 @@ public enum EleccionIdioma {
 	// lo escrito entre parentesis le indica a que archivo .txt acceder segun el respectivo
 	// idioma
 	
-	
-	ESPANOL("words_es.txt"), //espanol
-	PORTUGUES("words_pt.txt"), //portugues
-	INGLES("words_en.txt");//ingles
-	
+	INGLES("src/words_en.txt"), //ingles
+	ESPANOL("src/words_es.txt"), //espanol
+	PORTUGUES("src/words_pt.txt"), //portugues
+	ITALIANO("src/words_it.txt"), //italiano
+	FRANCES("src/words_fr.txt");  //frances
+
 	private String nombreArchivo;
 	
 	EleccionIdioma(String nombreArchivo) {
@@ -19,4 +20,5 @@ public enum EleccionIdioma {
 	public String getNombreArchivo() {
 		return this.nombreArchivo;
 	}
+	
 }
