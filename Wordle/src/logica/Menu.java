@@ -1,5 +1,5 @@
 package logica;
 
-public class Menu {
+public class Menu {//Clase innecesaria
 
 }
