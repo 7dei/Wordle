@@ -1,0 +1,169 @@
+package logica;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import util.SoundPlayer;
+
+public class Juego {
+	
+    private String palabraSecreta;
+    private int intentosRestantes;
+    private List<Intento> intentos;
+    private Set<String> palabrasIntentadas;
+    private Diccionario diccionario; 
+    private boolean juegoTerminado;	
+    private long tiempoInicio;
+    private long tiempoFin;
+	
+    public Juego(EleccionDificultad dificultad, EleccionIdioma idioma) throws IOException {
+    	
+    	this.intentosRestantes = dificultad.getIntentosMaximos(); 
+    	
+        this.diccionario = new Diccionario(idioma);
+        this.palabraSecreta = diccionario.obtenerPalabraAleatoria().toLowerCase();
+        System.out.println(this.palabraSecreta); //BORRAR, solo para ver palabra elegida en consola
+        this.intentos = new ArrayList<>(); 
+        this.palabrasIntentadas = new HashSet<>();
+        this.juegoTerminado = false;
+        this.tiempoInicio = System.currentTimeMillis();
+    }
+
+    public ResultadoIntento ingresar(String palabra) {
+        validarEstadoJuego();
+        palabra = palabra.toLowerCase(); 
+        validarPalabra(palabra);
+
+        if (palabrasIntentadas.contains(palabra)) {
+            throw new IllegalArgumentException("Ya ingresaste esa palabra");
+        }
+
+        palabrasIntentadas.add(palabra);
+
+        List<ResultadoLetra> resultado = evaluarPalabra(palabra);
+
+        Intento intento = new Intento(palabra, resultado);
+        intentos.add(intento);
+        intentosRestantes--;
+
+        if (palabra.equals(palabraSecreta) || intentosRestantes == 0) {
+            juegoTerminado = true;
+            tiempoFin = System.currentTimeMillis();
+        }
+
+        return new ResultadoIntento(resultado);
+    }
+	    
+    private void validarEstadoJuego() {
+        if (juegoTerminado) {
+            throw new IllegalStateException("El juego ya terminó");
+        }
+    }
+
+    private void validarPalabra(String palabra) {
+        if (palabra == null || palabra.length() != 5) {
+            throw new IllegalArgumentException("La palabra debe tener 5 letras");
+        }
+
+        if (!diccionario.esValida(palabra)) {
+        	throw new IllegalArgumentException("La palabra ingresada no existe en el diccionario");
+        }
+        }
+
+    private List<ResultadoLetra> evaluarPalabra(String palabra) {
+        List<ResultadoLetra> resultado = new ArrayList<>();
+        for (int i = 0; i < palabra.length(); i++) {
+            resultado.add(null); 
+        }
+
+        char[] secreta = palabraSecreta.toCharArray();
+        char[] intento = palabra.toCharArray();
+        boolean[] usados = new boolean[5];
+
+        for (int i = 0; i < 5; i++) {
+            if (intento[i] == secreta[i]) {
+                resultado.set(i, ResultadoLetra.CORRECTA);
+                usados[i] = true;
+            }
+        }
+
+        for (int i = 0; i < 5; i++) {
+            if (resultado.get(i) == null) {
+                boolean encontrada = false;
+                for (int j = 0; j < 5; j++) {
+                    if (!usados[j] && intento[i] == secreta[j]) {
+                        encontrada = true;
+                        usados[j] = true;
+                        break;
+                    }
+                }
+
+                if (encontrada) {
+                    resultado.set(i, ResultadoLetra.PRESENTE);
+                    SoundPlayer.reproducir("/sonidos/click.wav");
+                } else {
+                    resultado.set(i, ResultadoLetra.AUSENTE);
+                }
+            }
+        }
+        return resultado;
+    }
+
+    public boolean gano() {
+        if (intentos.isEmpty()) return false;
+        Intento ultimo = intentos.get(intentos.size() - 1);
+        return ultimo.getPalabra().equals(palabraSecreta);
+    }
+
+    public boolean perdio() {
+        return juegoTerminado && !gano();
+    }
+    
+    public static String informacion() {
+    	StringBuilder info = new StringBuilder();
+    	
+    	info.append("OBJETIVO: Adivinar la palabra oculta de 5 letras.\n");
+        
+        info.append("DIFICULTADES:\n");
+        info.append("- Fácil: 6 intentos.\n");
+        info.append("- Intermedio: 5 intentos.\n");
+        info.append("- Difícil: 4 intentos.\n");
+        
+        info.append("COLORES DE REFERENCIA:\n");
+        info.append("- VERDE: Letra correcta y posición correcta.\n");
+        info.append("- AMARILLO: La letra está en la palabra pero en otra posición.\n");
+        info.append("- GRIS: La letra no pertenece a la palabra.\n");
+        
+        info.append("EXTRAS:\n");
+        info.append("Podés cambiar el idioma (Español, Inglés, Portugués).\n");
+        info.append("El Ranking registra tu tiempo y cantidad de intentos.");
+        
+    	return info.toString();
+    }
+    
+    
+    public long getTiempoPartida() {
+        if (!juegoTerminado) {
+            throw new IllegalStateException("El juego todavia no termino");
+        }
+        return tiempoFin - tiempoInicio;
+    }
+
+    public int getIntentosRestantes() {
+        return intentosRestantes;
+    }
+
+    public List<Intento> getIntentos() {
+        return new ArrayList<>(intentos); 
+    }
+
+    public String getPalabraSecreta() {
+        if (!juegoTerminado) {
+            throw new IllegalStateException("El juego todavía no terminó");
+        }
+        return palabraSecreta;
+    }
+}
